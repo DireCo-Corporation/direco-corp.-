@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DireCo Corporation</title>
+    <style>
+        /* --- CSS INTERNAL --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background-color: #121212; color: #f1f1f1; overflow-x: hidden; }
+
+        .header-bar { background-color: #1e1e1e; height: 60px; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #333; }
+        .header-left, .header-right { display: flex; align-items: center; gap: 15px; }
+        .hamburger-btn { background: none; border: none; color: #f1f1f1; font-size: 24px; cursor: pointer; }
+        .hamburger-btn:hover { color: #0078D7; }
+        .logo { font-size: 20px; font-weight: bold; color: #0078D7; letter-spacing: 1px; }
+
+        .search-btn, .login-btn { background-color: transparent; border: 1px solid #555; color: #f1f1f1; padding: 6px 15px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover, .search-btn:hover { background-color: #0078D7; border-color: #0078D7; }
+        .search-input { padding: 7px; border-radius: 4px; border: 1px solid #555; background: #2a2a2a; color: white; transition: 0.3s; }
+        .search-input.hidden { display: none; }
+
+        .main-layout { display: flex; margin-top: 60px; height: calc(100vh - 60px); }
+        .sidebar { width: 250px; background-color: #1a1a1a; border-right: 1px solid #333; transition: margin-left 0.3s ease; }
+        .sidebar.hidden-sidebar { margin-left: -250px; }
+        .sidebar ul { list-style: none; padding: 20px 0; }
+        .sidebar ul li a { display: block; padding: 12px 25px; color: #b3b3b3; text-decoration: none; font-size: 16px; transition: 0.3s; border-left: 4px solid transparent; cursor: pointer; }
+        .sidebar ul li a:hover { background-color: #2a2a2a; color: #0078D7; border-left: 4px solid #0078D7; }
+
+        .content-page { flex-grow: 1; padding: 30px; background-color: #121212; overflow-y: auto; }
+        .page-section { animation: fadeIn 0.4s ease-in-out; }
+        .page-section.hidden { display: none; }
+        .page-section.active { display: block; }
+        .page-section h2 { color: #ffffff; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+
+        /* --- KARTU KONTEN --- */
+        .card-container { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+        .card { background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; padding: 20px; width: 260px; text-align: center; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: #0078D7; }
+        .card h3 { color: #0078D7; margin-bottom: 10px; font-size: 18px; }
+        .card p { color: #aaaaaa; font-size: 14px; margin-bottom: 15px; line-height: 1.4; }
+        
+        .cover-img { width: 100%; height: 250px; object-fit: cover; border-radius: 4px; margin-bottom: 15px; border: 1px solid #333; }
+        .cover-placeholder { width: 100%; height: 250px; background-color: #2a2a2a; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; border-radius: 4px; color: #555; }
+        
+        .download-btn { display: inline-block; background-color: #0078D7; color: white; padding: 8px 20px; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; width: 100%; box-sizing: border-box; }
+        .download-btn:hover { background-color: #005a9e; }
+        .empty-message { color: #777; font-style: italic; margin-top: 15px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER BAR -->
+    <header class="header-bar">
+        <div class="header-left">
+            <button class="hamburger-btn" onclick="toggleSidebar()"></button>
+            <h1 class="logo">DireCo Corp.</h1>
+        </div>
+        <div class="header-right">
+            <input type="text" id="searchBar" class="search-input hidden" placeholder="Cari konten...">
+            <button class="search-btn" onclick="toggleSearch()"></button>
+            <button class="login-btn" onclick="showPage('profile')">Akun</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- SIDEBAR -->
+        <nav class="sidebar" id="mySidebar">
+            <ul>
+                <li><a onclick="showPage('home')">Home</a></li>
+                <li><a onclick="showPage('app')">App</a></li>
+                <li><a onclick="showPage('novels')">Novels</a></li>
+                <li><a onclick="showPage('tool')">Tool</a></li>
+                <li><a onclick="showPage('profile')">Profile</a></li>
+                <li><a onclick="showPage('about')">About</a></li>
+            </ul>
+        </nav>
+
+        <!-- KONTEN UTAMA -->
+        <main class="content-page">
+            
+            <!-- HALAMAN BERANDA (HOME) -->
+            <section id="home" class="page-section active">
+                <div style="background: linear-gradient(135deg, #005a9e, #121212); padding: 40px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #0078D7; box-shadow: 0 4px 15px rgba(0, 120, 215, 0.2);">
+                    <h2 style="color: #ffffff; font-size: 32px; border: none; margin-bottom: 10px; padding: 0;">Selamat Datang di DireCo Corporation</h2>
+                    <p style="color: #cccccc; font-size: 18px; max-width: 700px; line-height: 1.6;">Pusat inovasi perangkat lunak independen dan literatur digital masa depan. Kami membangun ekosistem teknologi yang elegan, ringan, dan revolusioner.</p>
+                </div>
+                
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="background: #1e1e1e; padding: 25px; border-radius: 8px; flex: 1; border-left: 4px solid #0078D7; min-width: 250px;">
+                        <h3 style="color: #0078D7; margin-bottom: 10px; font-size: 20px;"> Visi Platform</h3>
+                        <p style="color: #aaaaaa; line-height: 1.5;">Menghadirkan pengalaman membaca modern lewat ekosistem NovRea, serta menyediakan utilitas yang dirancang dengan dedikasi tinggi.</p>
+                    </div>
+                    <div style="background: #1e1e1e; padding: 25px; border-radius: 8px; flex: 1; border-left: 4px solid #0078D7; min-width: 250px;">
+                        <h3 style="color: #0078D7; margin-bottom: 10px; font-size: 20px;"> Akses Langsung</h3>
+                        <p style="color: #aaaaaa; line-height: 1.5;">Jelajahi menu App dan Novels di samping untuk mengunduh rilis karya terbaru kami secara eksklusif langsung dari server database kami.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HALAMAN APP -->
+            <section id="app" class="page-section hidden">
+                <h2>Perangkat Lunak Resmi</h2>
+                <div class="card-container">
+                    {% set has_app = false %}
+                    {% for item in files %}
+                        {% if item.category == 'app' %}
+                            {% set has_app = true %}
+                            <div class="card">
+                                {% if item.cover_image %}
+                                    <img src="{{ url_for('static', filename='uploads/covers/' + item.cover_image) }}" class="cover-img" alt="Sampul App">
+                                {% else %}
+                                    <div class="cover-placeholder">Tanpa Sampul</div>
+                                {% endif %}
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('static', filename='uploads/files/' + item.file_path) }}" class="download-btn" download>Download Aplikasi</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if not has_app %}
+                        <p class="empty-message">Belum ada perangkat lunak yang dirilis.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- HALAMAN NOVEL -->
+            <section id="novels" class="page-section hidden">
+                <h2>Perpustakaan Novel</h2>
+                <div class="card-container">
+                    {% set has_novel = false %}
+                    {% for item in files %}
+                        {% if item.category == 'novel' %}
+                            {% set has_novel = true %}
+                            <div class="card">
+                                {% if item.cover_image %}
+                                    <img src="{{ url_for('static', filename='uploads/covers/' + item.cover_image) }}" class="cover-img" alt="Sampul Novel">
+                                {% else %}
+                                    <div class="cover-placeholder">Tanpa Sampul</div>
+                                {% endif %}
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('static', filename='uploads/files/' + item.file_path) }}" class="download-btn" download>Download Novel</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if not has_novel %}
+                        <p class="empty-message">Belum ada novel yang diterbitkan.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- HALAMAN TOOL -->
+            <section id="tool" class="page-section hidden">
+                <h2>Tools & Utility</h2>
+                <div class="card-container">
+                    {% set has_tool = false %}
+                    {% for item in files %}
+                        {% if item.category == 'tool' %}
+                            {% set has_tool = true %}
+                            <div class="card">
+                                {% if item.cover_image %}
+                                    <img src="{{ url_for('static', filename='uploads/covers/' + item.cover_image) }}" class="cover-img" alt="Sampul Tool">
+                                {% else %}
+                                    <div class="cover-placeholder">Tanpa Sampul</div>
+                                {% endif %}
+                                <h3>{{ item.title }}</h3>
+                                <p>{{ item.description }}</p>
+                                <a href="{{ url_for('static', filename='uploads/files/' + item.file_path) }}" class="download-btn" download>Download Tool</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if not has_tool %}
+                        <p class="empty-message">Belum ada tool yang tersedia.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- HALAMAN PROFILE & SISTEM LOGIN/REGISTER -->
+            <section id="profile" class="page-section hidden">
+                <h2>Profil & Akses Pengguna</h2>
+                
+                {% if not session.get('username') %}
+                <!-- KOTAK PILIHAN LOGIN / REGISTER -->
+                <div style="max-width: 450px; margin-top: 20px;">
+                    <!-- Tombol Pilihan Tab -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <button onclick="switchAuth('login')" id="btnTabLogin" style="flex: 1; padding: 10px; background: #0078D7; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Masuk (Login)</button>
+                        <button onclick="switchAuth('register')" id="btnTabReg" style="flex: 1; padding: 10px; background: #2a2a2a; color: #b3b3b3; border: 1px solid #555; border-radius: 4px; font-weight: bold; cursor: pointer;">Daftar Akun</button>
+                    </div>
+
+                    <!-- FORM LOGIN -->
+                    <div id="formLoginBox" style="background:#1e1e1e; padding:25px; border-radius:8px; border: 1px solid #333;">
+                        <p style="margin-bottom: 20px; color: #aaaaaa;">Masuk ke akun terdaftar DireCo Corp.</p>
+                        <form action="/login" method="POST">
+                            <input type="text" name="username" placeholder="Username" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:4px; border:1px solid #555; background:#2a2a2a; color:white;">
+                            <input type="password" name="password" placeholder="Password" required style="width:100%; padding:12px; margin-bottom:20px; border-radius:4px; border:1px solid #555; background:#2a2a2a; color:white;">
+                            <button type="submit" style="width:100%; padding:12px; background-color:#0078D7; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size: 16px;">Masuk Sekarang</button>
+                        </form>
+                    </div>
+
+                    <!-- FORM REGISTER (TERSEMBUNYI SECARA DEFAULT) -->
+                    <div id="formRegBox" style="display: none; background:#1e1e1e; padding:25px; border-radius:8px; border: 1px solid #333;">
+                        <p style="margin-bottom: 20px; color: #aaaaaa;">Buat akun baru secara gratis di DireCo Corp.</p>
+                        <form action="/register" method="POST">
+                            <input type="text" name="username" placeholder="Pilih Username Baru" required style="width:100%; padding:12px; margin-bottom:15px; border-radius:4px; border:1px solid #555; background:#2a2a2a; color:white;">
+                            <input type="password" name="password" placeholder="Buat Password" required style="width:100%; padding:12px; margin-bottom:20px; border-radius:4px; border:1px solid #555; background:#2a2a2a; color:white;">
+                            <button type="submit" style="width:100%; padding:12px; background-color: #28a745; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-size: 16px;">Daftar Akun Baru</button>
+                        </form>
+                    </div>
+                </div>
+                
+                {% else %}
+                <!-- KARTU PROFIL JIKA SUDAH LOGIN -->
+                <div class="profile-container" style="display: flex; gap: 25px; background:#1e1e1e; padding:30px; border-radius:12px; border: 1px solid #333; max-width: 650px; align-items: center; margin-top: 20px;">
+                    <div class="profile-avatar">
+                        <img src="{{ url_for('static', filename='uploads/profiles/' + current_user.profile_pic) }}" alt="Avatar" 
+                             style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid {% if current_user.role == 'admin' %}#0078D7{% else %}#555{% endif %}; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                    </div>
+                    <div class="profile-details" style="flex-grow: 1;">
+                        <h3 style="color: #ffffff; font-size: 28px; margin-bottom: 8px;">{{ current_user.username }}</h3>
+                        
+                        {% if current_user.role == 'admin' %}
+                            <span style="background-color: #0078D7; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 10px rgba(0, 120, 215, 0.4);"> Administrator Web</span>
+                        {% else %}
+                            <span style="background-color: #555; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;"> Pengguna Reguler</span>
+                        {% endif %}
+                        
+                        <p style="color: #aaaaaa; margin-top: 15px; font-style: italic; font-size: 15px; border-left: 3px solid #333; padding-left: 10px;">"{{ current_user.bio }}"</p>
+                        
+                        <div style="margin-top: 25px; display: flex; gap: 12px; flex-wrap: wrap;">
+                            {% if current_user.role == 'admin' %}
+                                <a href="/admin" style="padding: 10px 18px; background-color: #0078D7; color: white; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: bold; transition: 0.3s;">Ruang Kontrol</a>
+                            {% endif %}
+                            
+                            <button onclick="toggleEditForm()" style="padding: 10px 18px; background-color: #2a2a2a; color: white; border: 1px solid #555; border-radius: 4px; cursor: pointer; font-size: 14px; transition: 0.3s;">Ubah Profil</button>
+                            
+                            <a href="/logout" style="padding: 10px 18px; background-color: #ff4444; color: white; border: none; border-radius: 4px; text-decoration: none; font-size: 14px; font-weight: bold; transition: 0.3s;">Keluar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KOTAK FORMULIR EDIT PROFIL -->
+                <div id="editFormBox" style="display: none; background:#1e1e1e; padding:25px; border-radius:12px; border: 1px solid #333; max-width: 650px; margin-top: 20px;">
+                    <h3 style="color: #0078D7; margin-bottom: 15px;">Perbarui Informasi Profil</h3>
+                    <form action="/update_profile" method="POST" enctype="multipart/form-data">
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; color: #b3b3b3; margin-bottom: 5px;">Bio / Kata-kata Mutiara Baru:</label>
+                            <textarea name="bio" rows="3" style="width: 100%; padding: 10px; background: #2a2a2a; border: 1px solid #555; color: white; border-radius: 4px;" required>{{ current_user.bio }}</textarea>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; color: #b3b3b3; margin-bottom: 5px;">Ganti Foto Profil (Avatar Baru):</label>
+                            <input type="file" name="avatar_upload" accept="image/*" style="color: #aaa;">
+                        </div>
+                        <button type="submit" style="background-color: #0078D7; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Simpan Perubahan</button>
+                        <button type="button" onclick="toggleEditForm()" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-left: 10px;">Batal</button>
+                    </form>
+                </div>
+                {% endif %}
+            </section>
+
+            <!-- HALAMAN TENTANG (ABOUT) -->
+            <section id="about" class="page-section hidden">
+                <h2 style="font-size: 28px; margin-bottom: 20px;">Tentang DireCo Corp.</h2>
+                
+                <div style="background: #1e1e1e; padding: 35px; border-radius: 10px; border: 1px solid #333; line-height: 1.8; color: #bbbbbb;">
+                    <p style="margin-bottom: 15px;"><strong style="color: #ffffff;">DireCo Corporation</strong> didirikan dengan satu ambisi: menciptakan standar baru dalam distribusi perangkat lunak dan karya fiksi mandiri di Indonesia.</p>
+                    
+                    <p style="margin-bottom: 15px;">Proyek kebanggaan kami saat ini adalah <strong>NovRea</strong>, sebuah ekosistem pembaca novel desktop interaktif yang dikembangkan menggunakan Python, lengkap dengan fitur pengonversi dokumen ke format khusus <code style="background: #2a2a2a; padding: 2px 6px; border-radius: 4px; color: #0078D7;">.nvra</code>. Kami merancang arsitektur aplikasi kami agar tetap ringan, andal, dan mampu beroperasi maksimal bahkan pada arsitektur komputasi 32-bit.</p>
+                    
+                    <p style="margin-bottom: 25px;">Selain perangkat lunak, portal ini berfungsi sebagai perpustakaan utama untuk merilis novel digital orisinil, dibalut dengan antarmuka bertema gelap (*dark-theme*) yang elegan dan nyaman bagi para pembaca setia.</p>
+                    
+                    <hr style="border-color: #333; margin: 20px 0;">
+                    
+                    <p style="text-align: center; color: #0078D7; font-weight: bold; font-size: 18px; letter-spacing: 1px;">"Membangun Masa Depan, Satu Baris Kode dalam Satu Waktu."</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- SCRIPT NAVIGASI, PENCARIAN & SWITCH AUTH -->
+    <script>
+        function toggleSidebar() { 
+            document.getElementById("mySidebar").classList.toggle("hidden-sidebar"); 
+        }
+        
+        function toggleSearch() { 
+            let searchBar = document.getElementById("searchBar");
+            searchBar.classList.toggle("hidden");
+            if (!searchBar.classList.contains("hidden")) {
+                searchBar.focus();
+            }
+        }
+
+        // Fitur Tab Switch antara Login dan Register
+        function switchAuth(mode) {
+            let loginBox = document.getElementById("formLoginBox");
+            let regBox = document.getElementById("formRegBox");
+            let btnLogin = document.getElementById("btnTabLogin");
+            let btnReg = document.getElementById("btnTabReg");
+
+            if (mode === 'login') {
+                loginBox.style.display = "block";
+                regBox.style.display = "none";
+                btnLogin.style.background = "#0078D7";
+                btnLogin.style.color = "white";
+                btnLogin.style.border = "none";
+                btnReg.style.background = "#2a2a2a";
+                btnReg.style.color = "#b3b3b3";
+                btnReg.style.border = "1px solid #555";
+            } else {
+                loginBox.style.display = "none";
+                regBox.style.display = "block";
+                regBox.style.animation = "fadeIn 0.3s ease-in-out";
+                btnReg.style.background = "#28a745";
+                btnReg.style.color = "white";
+                btnReg.style.border = "none";
+                btnLogin.style.background = "#2a2a2a";
+                btnLogin.style.color = "#b3b3b3";
+                btnLogin.style.border = "1px solid #555";
+            }
+        }
+
+        // Fitur Pencarian Instan
+        document.getElementById("searchBar").addEventListener("keyup", function() {
+            let keyword = this.value.toLowerCase();
+            let cards = document.querySelectorAll(".card");
+
+            cards.forEach(card => {
+                let title = card.querySelector("h3").innerText.toLowerCase();
+                let desc = card.querySelector("p").innerText.toLowerCase();
+                
+                if (title.includes(keyword) || desc.includes(keyword)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+
+        function toggleEditForm() {
+            let box = document.getElementById("editFormBox");
+            if (box.style.display === "none") {
+                box.style.display = "block";
+            } else {
+                box.style.display = "none";
+            }
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => { 
+                section.classList.remove('active'); 
+                section.classList.add('hidden'); 
+            });
+            let activeSection = document.getElementById(pageId);
+            activeSection.classList.remove('hidden'); 
+            activeSection.classList.add('active');
+        }
+    </script>
+</body>
+</html>
